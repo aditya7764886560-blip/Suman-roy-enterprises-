@@ -9,6 +9,110 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     
     <style>
+        /* ==================== INTRO / SPLASH SCREEN ANIMATION ==================== */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0d0d0d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s ease;
+        }
+
+        .splash-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            animation: bouncyEntry 1.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .splash-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3), 0 0 50px rgba(0, 255, 102, 0.2);
+        }
+
+        .splash-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1.5px;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+        }
+
+        .splash-loader {
+            width: 40px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .splash-loader-bar {
+            width: 100%;
+            height: 100%;
+            background: #00ff66;
+            position: absolute;
+            left: -100%;
+            animation: loadingProgress 2.2s ease-in-out forwards;
+        }
+
+        @keyframes bouncyEntry {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) translateY(50px);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.15) translateY(-10px);
+            }
+            70% {
+                transform: scale(0.95) translateY(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes loadingProgress {
+            0% { left: -100%; }
+            100% { left: 0%; }
+        }
+
+        .splash-fade-out {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none;
+        }
+
+        /* Initial state for main container zoom-in entry */
+        .app-container {
+            opacity: 0;
+            transform: scale(0.97);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .app-container.app-loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         /* ==================== BASE STYLES ==================== */
         * {
             box-sizing: border-box;
@@ -29,6 +133,7 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
+            overflow: hidden; /* Prevent scrolling during splash screen */
         }
 
         .app-container {
@@ -503,6 +608,50 @@
             transition: background-color 0.2s;
         }
 
+        /* ==================== GALLERY STYLES ==================== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-empty-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px 10px;
+            color: #888888;
+            font-size: 13px;
+            background: #111;
+            border: 1px dashed #333;
+            border-radius: 12px;
+        }
+
+        .gallery-upload-section {
+            background-color: #141414;
+            border: 1px solid #2d2d2d;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
         /* ==================== SERVICE DETAIL POPUP PANEL ==================== */
         .service-panel-overlay {
             display: none;
@@ -752,16 +901,20 @@
 
         .qr-wrapper {
             background: #ffffff;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 14px;
             display: inline-block;
             margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .qr-wrapper img {
-            width: 180px;
-            height: 180px;
+            width: 220px;
+            height: auto;
+            max-height: 280px;
             display: block;
+            border-radius: 8px;
+            object-fit: contain;
         }
 
         .upi-details-card {
@@ -1122,6 +1275,17 @@
 </head>
 <body>
 
+    <!-- BOUNCY INTRO ANIMATION / SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="https://plain-apac-prod-public.komododecks.com/202609/28/m8ZO94mglGdTwbPpuwu4/image.png" alt="Suman Roy Enterprises Logo" class="splash-logo">
+            <h1 class="splash-title">SUMAN ROY<br>ENTERPRISES</h1>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="app-container" id="home">
         
         <!-- HEADER -->
@@ -1247,7 +1411,7 @@
                         </div>
                     </div>
 
-                    <div class="service-square-box offer-square" onclick="scrollToBooking('Site Visit')">
+                    <div class="service-square-box offer-square" onclick="scrollToBooking('Site Visit (₹500 Charge)')">
                         <span class="mini-badge">8+ YRS</span>
                         <div class="icon-circle">
                             <span class="material-symbols-outlined">workspace_premium</span>
@@ -1296,9 +1460,9 @@
                 <div class="form-group">
                     <label class="form-label">Booking Purpose</label>
                     <select id="bookingPurpose" class="form-select">
-                        <option value="Camera Installation">1. Camera Installation</option>
-                        <option value="Existing Camera Service Provide">2. Existing Camera Service Provide</option>
-                        <option value="Site Visit">3. Site Visit (₹500 Charge)</option>
+                        <option value="Camera Installation (₹500 Charge)">1. Camera Installation (₹500 Charge)</option>
+                        <option value="Existing Camera Service Provide (₹500 Charge)">2. Existing Camera Service Provide (₹500 Charge)</option>
+                        <option value="Site Visit (₹500 Charge)">3. Site Visit (₹500 Charge)</option>
                     </select>
                 </div>
 
@@ -1355,7 +1519,7 @@
                     <div class="tech-header">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Tech 1" class="tech-img">
                         <div class="tech-info">
-                            <h3>Suman Roy</h3>
+                            <h3>Satyam Kumar</h3>
                             <span class="tech-exp-badge">8+ Yrs Exp</span>
                         </div>
                     </div>
@@ -1494,11 +1658,11 @@
                 <span>WhatsApp</span>
             </a>
             
-            <a href="#bookingSection" class="nav-item" onclick="setActiveNav(this)">
+            <a href="javascript:void(0)" class="nav-item" onclick="openGalleryModal(); setActiveNav(this);">
                 <div class="nav-icon-wrapper">
-                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="material-symbols-outlined">photo_library</span>
                 </div>
-                <span>Book Now</span>
+                <span>Gallery</span>
             </a>
             
             <a href="tel:7903031970" class="nav-item">
@@ -1509,6 +1673,43 @@
             </a>
         </footer>
 
+    </div>
+
+    <!-- GALLERY MODAL -->
+    <div class="modal-overlay" id="galleryModal">
+        <div class="modal-box" style="max-width: 440px; text-align: left;">
+            <button class="modal-close-btn" onclick="closeGalleryModal()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <h3 class="pay-header" style="text-align: center; margin-bottom: 16px;">Photo Gallery</h3>
+
+            <div class="gallery-grid" id="publicGalleryGrid">
+                <!-- Dynamic photos loaded via JS -->
+            </div>
+
+            <div class="gallery-upload-section">
+                <h4 style="font-size: 13px; color: #fff; margin-bottom: 8px;">Upload Photo to Gallery</h4>
+                <p style="font-size: 11px; color: #aaa; margin-bottom: 12px;">Password enter karke ImgBB ke zariye photo upload karein.</p>
+                
+                <button class="pay-confirm-btn" id="galleryUploadTriggerBtn" onclick="promptGalleryUpload()">
+                    <span class="material-symbols-outlined">lock</span>
+                    Password & Upload Photo
+                </button>
+
+                <div id="galleryUploadBox" style="display: none; margin-top: 14px;">
+                    <div class="upload-card-box">
+                        <span class="material-symbols-outlined" style="font-size: 30px; color: #00ff66;">add_photo_alternate</span>
+                        <p style="font-size: 12px; color: #ccc; margin-top: 4px;" id="galleryUploadText">Choose Photo to Upload</p>
+                        <input type="file" id="galleryFileInput" class="upload-file-input" accept="image/*" onchange="handleGalleryFileSelect(event)">
+                    </div>
+                    <div id="galleryStatusText" style="font-size: 11px; color: #ff8888; margin-bottom: 10px; text-align: center;"></div>
+                    <button class="pay-confirm-btn" id="gallerySubmitBtn" onclick="uploadGalleryPhotoToImgBB()">
+                        <span class="material-symbols-outlined">cloud_upload</span>
+                        Upload to Public Gallery
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ADMIN SLIDER MANAGEMENT MODAL -->
@@ -1553,11 +1754,11 @@
                 <span class="material-symbols-outlined">close</span>
             </button>
             
-            <h3 class="pay-header">Site Visit Booking Charge</h3>
+            <h3 class="pay-header">Booking Advance Charge</h3>
             <div class="pay-amount-tag">₹500.00</div>
 
             <div class="qr-wrapper">
-                <img id="upiQrCodeImg" src="" alt="UPI Payment QR Code">
+                <img id="upiQrCodeImg" src="https://i.ibb.co/8LMQPVXc/IMG-20260928-WA0003.jpg" alt="UPI Payment QR Code">
             </div>
 
             <div class="upi-details-card">
@@ -1590,6 +1791,18 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // Splash Screen Reveal Logic
+        window.addEventListener('load', () => {
+            const splash = document.getElementById('splash-screen');
+            const app = document.querySelector('.app-container');
+
+            setTimeout(() => {
+                splash.classList.add('splash-fade-out');
+                app.classList.add('app-loaded');
+                document.body.style.overflow = 'auto'; // Enable scrolling after splash screen
+            }, 2300);
+        });
+
         const IMGBB_API_KEY = "7c14222ec43590e8e7eeba7ed3b556a8";
 
         // Initial Default Slider Images
@@ -1600,6 +1813,7 @@
         ];
 
         let currentSliderImages = JSON.parse(localStorage.getItem('custom_slider_images')) || defaultSliderImages;
+        let publicGalleryImages = JSON.parse(localStorage.getItem('public_gallery_images')) || [];
 
         function renderPublicSlider() {
             const wrapper = document.getElementById('sliderWrapper');
@@ -1733,7 +1947,6 @@
                 }
 
                 if (uploadedUrls.length > 0) {
-                    // Update global slider
                     currentSliderImages = uploadedUrls;
                     localStorage.setItem('custom_slider_images', JSON.stringify(currentSliderImages));
 
@@ -1755,6 +1968,108 @@
                 btn.disabled = false;
                 btn.innerHTML = `<span class="material-symbols-outlined">cloud_upload</span> Upload & Publish to Public Slider`;
                 selectedAdminFiles = [];
+            }
+        }
+
+        /* ==================== GALLERY FUNCTIONS ==================== */
+        function openGalleryModal() {
+            renderPublicGallery();
+            document.getElementById('galleryModal').style.display = 'flex';
+        }
+
+        function closeGalleryModal() {
+            document.getElementById('galleryModal').style.display = 'none';
+        }
+
+        function renderPublicGallery() {
+            const grid = document.getElementById('publicGalleryGrid');
+            grid.innerHTML = '';
+
+            if (publicGalleryImages.length === 0) {
+                grid.innerHTML = `<div class="gallery-empty-msg">Abhi koi photo upload nahi hui hai.<br>Upload Photo button se nayi photo add karein.</div>`;
+                return;
+            }
+
+            publicGalleryImages.forEach((url, idx) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.innerHTML = `<img src="${url}" alt="Gallery Photo ${idx + 1}" onclick="window.open('${url}', '_blank')">`;
+                grid.appendChild(item);
+            });
+        }
+
+        function promptGalleryUpload() {
+            const pwd = prompt("Enter Password to Upload Photo to Gallery:");
+            if (pwd === "sumansre") {
+                document.getElementById('galleryUploadTriggerBtn').style.display = 'none';
+                document.getElementById('galleryUploadBox').style.display = 'block';
+            } else if (pwd !== null) {
+                alert("Incorrect Password!");
+            }
+        }
+
+        let selectedGalleryFile = null;
+
+        function handleGalleryFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedGalleryFile = file;
+                document.getElementById('galleryUploadText').innerText = "Selected: " + file.name;
+            }
+        }
+
+        async function uploadGalleryPhotoToImgBB() {
+            if (!selectedGalleryFile) {
+                alert("Kripya pehle upload ke liye ek photo choose karein!");
+                return;
+            }
+
+            const btn = document.getElementById('gallerySubmitBtn');
+            const statusText = document.getElementById('galleryStatusText');
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Uploading...`;
+            statusText.innerText = "⏳ ImgBB par upload ho raha hai, wait karein...";
+            statusText.style.color = "#ffff88";
+
+            try {
+                const formData = new FormData();
+                formData.append("image", selectedGalleryFile);
+
+                const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const newPhotoUrl = result.data.url;
+                    publicGalleryImages.unshift(newPhotoUrl);
+                    localStorage.setItem('public_gallery_images', JSON.stringify(publicGalleryImages));
+
+                    renderPublicGallery();
+
+                    statusText.innerText = "✅ Photo Gallery mein upload ho gayi!";
+                    statusText.style.color = "#00ff66";
+
+                    setTimeout(() => {
+                        document.getElementById('galleryUploadBox').style.display = 'none';
+                        document.getElementById('galleryUploadTriggerBtn').style.display = 'flex';
+                        statusText.innerText = '';
+                        selectedGalleryFile = null;
+                        document.getElementById('galleryFileInput').value = '';
+                        document.getElementById('galleryUploadText').innerText = "Choose Photo to Upload";
+                    }, 1500);
+                } else {
+                    alert("Upload fail ho gaya. Kripya dobara try karein.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error: Photo upload nahi ho payi.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span class="material-symbols-outlined">cloud_upload</span> Upload to Public Gallery`;
             }
         }
 
@@ -1898,7 +2213,7 @@
             let actionBtnHtml = '';
             if (data.actionType === 'booking') {
                 actionBtnHtml = `
-                    <button class="panel-action-btn" onclick="closeServiceDetail(); scrollToBooking('Site Visit');">
+                    <button class="panel-action-btn" onclick="closeServiceDetail(); scrollToBooking('Site Visit (₹500 Charge)');">
                         <span class="material-symbols-outlined">calendar_month</span>
                         Book Site Visit Now (₹500)
                     </button>
@@ -2123,7 +2438,6 @@
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const address = document.getElementById('custAddress').value.trim();
-            const purpose = document.getElementById('bookingPurpose').value;
 
             if (!name || !phone || !address) {
                 alert('Kripya Name, Phone Number aur Address sahi se bharein!');
@@ -2135,38 +2449,11 @@
                 return;
             }
 
-            // Site visit payment check
-            if (purpose === 'Site Visit') {
-                openPaymentModal();
-            } else {
-                sendDirectBookingToWhatsApp();
-            }
-        }
-
-        function sendDirectBookingToWhatsApp() {
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const address = document.getElementById('custAddress').value.trim();
-            const purpose = document.getElementById('bookingPurpose').value;
-
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const formattedDate = `${selectedDay} ${monthNames[selectedMonth]} ${selectedYear}`;
-
-            const message = `🚨 *NEW CAMERA BOOKING INQUIRY* 🚨%0A%0A` +
-                `👤 *Name:* ${encodeURIComponent(name)}%0A` +
-                `📞 *Phone:* ${encodeURIComponent(phone)}%0A` +
-                `📍 *Address:* ${encodeURIComponent(address)}%0A` +
-                `🛠️ *Booking Purpose:* ${encodeURIComponent(purpose)}%0A` +
-                `📅 *Date:* ${formattedDate}%0A` +
-                `⏰ *Time Slot:* ${selectedTimeSlot}`;
-
-            window.open(`https://wa.me/919122832197?text=${message}`, '_blank');
+            // Subhi booking purpose ke liye payment modal open hoga
+            openPaymentModal();
         }
 
         function openPaymentModal() {
-            const upiString = `upi://pay?pa=sumanroyvlogs@okhdfcbank&pn=SUMAN%20ROY%20ENTERPRISES&am=500&cu=INR`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}`;
-            document.getElementById('upiQrCodeImg').src = qrUrl;
             document.getElementById('paymentModal').style.display = 'flex';
         }
 
@@ -2220,7 +2507,7 @@
 
                 if (result.success) {
                     const imageUrl = result.data.url;
-                    sendSiteVisitBookingToWhatsApp(imageUrl);
+                    sendBookingToWhatsApp(imageUrl);
                 } else {
                     alert("Screenshot upload nahi ho paya! Kripya dobara try karein.");
                     resetUploadBtn();
@@ -2238,7 +2525,7 @@
             btn.innerHTML = `<span class="material-symbols-outlined">send</span> Upload & Send to WhatsApp`;
         }
 
-        function sendSiteVisitBookingToWhatsApp(imageUrl) {
+        function sendBookingToWhatsApp(imageUrl) {
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const address = document.getElementById('custAddress').value.trim();
@@ -2247,7 +2534,7 @@
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             const formattedDate = `${selectedDay} ${monthNames[selectedMonth]} ${selectedYear}`;
 
-            const message = `🚨 *NEW SITE VISIT BOOKING (PAID ₹500)* 🚨%0A%0A` +
+            const message = `🚨 *NEW CAMERA BOOKING (PAID ₹500)* 🚨%0A%0A` +
                 `👤 *Name:* ${encodeURIComponent(name)}%0A` +
                 `📞 *Phone:* ${encodeURIComponent(phone)}%0A` +
                 `📍 *Address:* ${encodeURIComponent(address)}%0A` +
